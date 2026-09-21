@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "9627XXXXXXXX"; // عدّل الرقم هون
+const WHATSAPP_NUMBER = "0956685641"; // عدّل الرقم هون
 
 export default function Footer() {
   return (

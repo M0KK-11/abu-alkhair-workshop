@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 
-const WHATSAPP_NUMBER = "9627XXXXXXXX"; // نفس الرقم المستخدم بالفوتر
+const WHATSAPP_NUMBER = "0956685641"; // نفس الرقم المستخدم بالفوتر
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
