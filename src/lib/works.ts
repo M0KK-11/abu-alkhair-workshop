@@ -17,6 +17,19 @@ export const categories = ['الكل', 'طاولات', 'خزائن', 'أبواب
 
 export const works: Work[] = [
   {
+    slug: 'royal-walnut-dining-table',
+    title: 'طاولة طعام ملكية بقصّة حية (Live Edge) ومقاعد منجدة بالجلد الطبيعي',
+    category: 'طاولات',
+    summary: 'طاولة ملكية من لوحين متقابلين من خشب الجوز المعمر وقاعدة نحاسية',
+    description:
+      'صُممت هذه القطعة خصيصاً لفيلا خاصة بالرياض، باستخدام لوحين متقابلين من شجرة جوز أمريكي معمرة، مع صقل يدوي بزيوت طبيعية عضوية خالية من الكيماويات الضارة، لتكون محوراً عمرانياً دافئاً يجمع العائلة لأجيال.',
+    material: 'خشب جوز أمريكي صلب (FAS)',
+    duration: '28 يوم عمل يدوي مكثف',
+    finish: '4 طبقات زيت وشمع عسل طبيعي (Osmo)',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBesiWog6lyU3Bn__oQP6ZXdk-90ZfwOR9pPObwpKjQXVJ_5oFKVqH99yNboa3sMKF3L8dC7DAXzt5i43fKZqrd6971Zi8vsagk6S7onwsWeEVzr4bzbckg91R1hXAlvloCUOOcHsWjaxvcDi5nXfoBvPVtlefzqX2OTTGupDqrQtk-6Bo0YHPgu7NAMcfEwI-5xRClVkjKw-NxarmjJyBSkdgSZ1J2hfuWLVI_vcW_70WWYhjgDCET',
+  },
+  {
     slug: 'oak-dining-table',
     title: 'طاولة طعام من خشب البلوط',
     category: 'طاولات',

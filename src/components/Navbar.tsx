@@ -1,118 +1,114 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
-import { IconMenu, IconClose } from '../lib/icons'
+import Logo from './Logo'
 
 const links = [
   { to: '/', label: 'الرئيسية' },
-  { to: '/gallery', label: 'المعرض' },
-  { to: '/about', label: 'عنّا' },
-  { to: '/contact', label: 'تواصل' },
+  { to: '/gallery', label: 'المعرض والأعمال' },
+  { to: '/work/royal-walnut-dining-table', label: 'تفاصيل العمل' },
+  { to: '/about', label: 'عن الورشة' },
+  { to: '/contact', label: 'تواصل معنا' },
 ]
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-charcoal/85 backdrop-blur-md border-b border-oak/15 shadow-lg shadow-charcoal/10'
-          : 'bg-transparent'
-      }`}
-    >
-      <nav className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
-        <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
-          <span className="grid h-10 w-10 place-items-center rounded-full border border-brass/60 text-brass transition-colors group-hover:bg-brass group-hover:text-ivory">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 4l6 6-9 9-4 1 1-4 9-9z" />
-              <path d="M4 20h6" />
-            </svg>
-          </span>
-          <span className="flex flex-col leading-tight">
-            <span className="font-display text-lg font-extrabold text-ivory">ورشة أبو الخير</span>
-            <span className="text-[11px] tracking-[0.2em] text-oak/80">نجارة يدوية فاخرة</span>
-          </span>
+    <header className="fixed top-0 w-full z-50 bg-primary-container/95 backdrop-blur-xl border-b border-[#d9b98c]/25">
+      <div className="h-20 max-w-[1360px] mx-auto px-6 md:px-12 flex items-center justify-between gap-6">
+        {/* Brand / Logo */}
+        <Link
+          to="/"
+          className="flex items-center shrink-0 group transition-opacity hover:opacity-95"
+          onClick={() => setOpen(false)}
+        >
+          <Logo variant="light" showSubtitle={true} />
         </Link>
 
-        <ul className="hidden items-center gap-8 md:flex">
+        {/* Desktop Navigation Links */}
+        <nav className="hidden xl:flex items-center gap-7">
           {links.map((l) => (
-            <li key={l.to}>
-              <NavLink
-                to={l.to}
-                end={l.to === '/'}
-                className={({ isActive }) =>
-                  `relative text-sm font-medium transition-colors ${
-                    isActive ? 'text-brass' : 'text-ivory/80 hover:text-ivory'
-                  } after:absolute after:-bottom-1.5 after:right-0 after:h-px after:bg-brass after:transition-all ${
-                    isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
-                  }`
-                }
-              >
-                {l.label}
-              </NavLink>
-            </li>
-          ))}
-          <li>
-            <Link
-              to="/contact"
-              className="rounded-full bg-brass px-5 py-2.5 text-sm font-semibold text-ivory shadow-sm transition-all hover:bg-brass-bright hover:shadow-md"
+            <NavLink
+              key={l.to}
+              to={l.to}
+              end={l.to === '/'}
+              className={({ isActive }) =>
+                `text-sm py-1 px-2.5 transition-colors rounded ${
+                  isActive
+                    ? 'bg-[#fff9ef]/10 text-[#fff9ef] font-semibold'
+                    : 'text-[#d2c4bf] hover:text-[#fff9ef]'
+                }`
+              }
             >
-              اطلب الآن
-            </Link>
-          </li>
-        </ul>
-
-        <button
-          className="text-ivory md:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="القائمة"
-        >
-          {open ? <IconClose /> : <IconMenu />}
-        </button>
-      </nav>
-
-      {/* Mobile menu */}
-      <div
-        className={`overflow-hidden bg-charcoal/95 backdrop-blur-md md:hidden transition-[max-height] duration-300 ${
-          open ? 'max-h-96 border-b border-oak/15' : 'max-h-0'
-        }`}
-      >
-        <ul className="flex flex-col gap-1 px-6 py-4">
-          {links.map((l) => (
-            <li key={l.to}>
-              <NavLink
-                to={l.to}
-                end={l.to === '/'}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `block rounded-lg px-4 py-3 text-base transition-colors ${
-                    isActive ? 'bg-oak/10 text-brass' : 'text-ivory/85 hover:bg-oak/5'
-                  }`
-                }
-              >
-                {l.label}
-              </NavLink>
-            </li>
+              {l.label}
+            </NavLink>
           ))}
-          <li className="pt-2">
-            <Link
-              to="/contact"
-              onClick={() => setOpen(false)}
-              className="block rounded-full bg-brass px-5 py-3 text-center font-semibold text-ivory"
+        </nav>
+
+        {/* Action Call & CTA */}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex flex-col text-left text-[#d2c4bf] leading-tight">
+            <span className="text-[11px] text-[#d2c4bf]/70">اتصال مباشر</span>
+            <a
+              href="tel:+966501234567"
+              className="text-xs text-[#fff9ef] font-mono hover:text-oak transition-colors"
+              dir="ltr"
             >
-              اطلب الآن
-            </Link>
-          </li>
-        </ul>
+              +966 50 123 4567
+            </a>
+          </div>
+
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 bg-[#b87333] hover:bg-[#c37c3b] text-white px-4 py-2 rounded text-xs sm:text-sm font-medium shadow-[0_2px_12px_rgba(184,115,51,0.35)] transition-all hover:shadow-[0_4px_16px_rgba(184,115,51,0.5)]"
+          >
+            <span className="material-symbols-outlined text-[18px]">call</span>
+            <span className="hidden sm:inline">طلب استشارة أو تسعير</span>
+            <span className="sm:hidden">استشارة</span>
+          </Link>
+
+          {/* Mobile hamburger menu toggle */}
+          <button
+            type="button"
+            className="xl:hidden p-2 text-[#fff9ef] rounded-md focus:outline-none"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-label="القائمة"
+          >
+            <span className="material-symbols-outlined text-[26px]">
+              {open ? 'close' : 'menu'}
+            </span>
+          </button>
+        </div>
       </div>
+
+      {/* Mobile drawer */}
+      {open && (
+        <div className="xl:hidden bg-primary-container border-b border-[#d9b98c]/25 px-6 py-4 space-y-2">
+          {links.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              end={l.to === '/'}
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-md text-sm transition-colors ${
+                  isActive
+                    ? 'bg-[#fff9ef]/10 text-[#fff9ef] font-semibold'
+                    : 'text-[#d2c4bf] hover:text-[#fff9ef]'
+                }`
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+          <div className="pt-2 border-t border-[#d9b98c]/15 text-xs text-[#d2c4bf] flex items-center justify-between">
+            <span>اتصال مباشر:</span>
+            <span className="font-mono text-[#fff9ef]" dir="ltr">
+              +966 50 123 4567
+            </span>
+          </div>
+        </div>
+      )}
     </header>
   )
 }

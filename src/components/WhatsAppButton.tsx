@@ -1,18 +1,20 @@
-import { IconWhatsApp } from '../lib/icons'
-
 export default function WhatsAppButton() {
   return (
-    <a
-      href="https://wa.me/201001234567"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="تواصل عبر واتساب"
-      className="group fixed bottom-6 left-6 z-50 flex items-center gap-3 rounded-full bg-whatsapp px-4 py-4 text-white shadow-lg shadow-whatsapp/30 transition-all hover:pl-5 hover:shadow-xl"
-    >
-      <IconWhatsApp className="h-6 w-6" />
-      <span className="max-w-0 overflow-hidden whitespace-nowrap text-sm font-semibold opacity-0 transition-all duration-300 group-hover:max-w-[8rem] group-hover:opacity-100">
-        تواصل معنا
-      </span>
-    </a>
+    <div className="fixed bottom-6 left-6 z-50 flex items-center group">
+      {/* Tooltip on hover */}
+      <div className="hidden md:block absolute left-full ml-3 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap bg-primary-container text-[#fff9ef] text-xs py-1.5 px-3 rounded shadow-lg border border-[#d9b98c]/20">
+        تحدث مع المعلم أبو الخير مباشرة
+      </div>
+
+      <a
+        aria-label="WhatsApp"
+        href="https://wa.me/966501234567"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-14 h-14 rounded-full bg-[#25d366] text-white flex items-center justify-center shadow-[0_8px_24px_rgba(37,211,102,0.4)] hover:shadow-[0_12px_28px_rgba(37,211,102,0.6)] hover:scale-105 transition-transform"
+      >
+        <span className="material-symbols-outlined text-[28px]">chat</span>
+      </a>
+    </div>
   )
 }
