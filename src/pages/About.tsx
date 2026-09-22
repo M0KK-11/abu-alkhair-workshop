@@ -26,9 +26,9 @@ export default function About() {
                   ثلاثة عقود من العشق لألياف الخشب وأسرار الحرفة
                 </h1>
                 <p className="text-sm sm:text-base md:text-lg text-on-surface-variant max-w-2xl leading-relaxed">
-                  من قلب الرياض، نروي عبر جذوع الزان والبلوط والجوز الأمريكي فصولاً تتجسد في تحفٍ
-                  معمارية تدوم أجيالاً. رحلة تتناغم فيها الدقة الإسكندنافية مع أصالة التراث النجدي
-                  وحكمة التعشيق الياباني.
+                  من قلب دمشق، نروي عبر جذوع الزان والبلوط والجوز الأمريكي فصولاً تتجسد في تحفٍ
+                  معمارية تدوم أجيالاً. رحلة تتناغم فيها الدقة الإسكندنافية مع أصالة التراث الدمشقي
+                  العريق وحكمة التعشيق الياباني.
                 </p>
 
                 {/* Founder's Signature Quote Card */}
@@ -96,7 +96,7 @@ export default function About() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
                   <div className="absolute bottom-4 right-4 text-white text-xs bg-primary-container/85 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-[#d9b98c]/20">
-                    معمل الأتيليه الرئيسي - حي العارض، الرياض
+                    معمل الأتيليه الرئيسي - حي الإخلاص، المزة، دمشق
                   </div>
                 </div>
 
@@ -203,7 +203,7 @@ export default function About() {
                   </div>
                   <h3 className="text-base font-bold text-primary mb-2">انطلاق المشغل الأول</h3>
                   <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                    تأسيس الورشة في الرياض والتركيز المتخصص على تصنيع أبواب الخشب السويدي المعالج
+                    تأسيس الورشة في دمشق والتركيز المتخصص على تصنيع أبواب الخشب السويدي المعالج
                     والزان الصلب بتقنيات النقر واللسان التراثية.
                   </p>
                 </div>
@@ -395,7 +395,7 @@ export default function About() {
                 </div>
 
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-snug">
-                  تفضل بزيارتنا لاحتساء القهوة السعودية ولمس الأخشاب الخام بنفسك
+                  تفضل بزيارتنا لاحتساء فنجان قهوة ولمس الأخشاب الخام بنفسك
                 </h3>
 
                 <p className="text-xs sm:text-sm text-[#d2c4bf] leading-relaxed">
@@ -414,7 +414,7 @@ export default function About() {
                   </Link>
 
                   <a
-                    href="https://wa.me/966501234567"
+                    href="https://wa.me/963988696805"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors"
@@ -435,7 +435,7 @@ export default function About() {
                     <span className="material-symbols-outlined text-sm text-[#b87333]">
                       pin_drop
                     </span>
-                    <span>حي العارض، شمال مدينة الرياض</span>
+                    <span>حي الإخلاص، المزة، دمشق</span>
                   </div>
                 </div>
               </div>

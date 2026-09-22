@@ -35,7 +35,7 @@ const featuredProjects: FeaturedProject[] = [
     title: 'تجليد جداري بانورامي ومكتبة خاصة',
     category: 'ديكورات خشبية ومعمارية',
     filterType: 'doors-cladding',
-    spec: 'حي حطين، الرياض',
+    spec: 'المزة، دمشق',
     specIcon: 'pin_drop',
     description:
       'تكسية جدارية هندسية تمتد بارتفاع مزدوج (Double Height) مدمجة مع نظام تكييف مخفي وإضاءات محيطية.',
@@ -106,6 +106,7 @@ export default function Home() {
   const [filter, setFilter] = useState<'all' | 'custom-furniture' | 'doors-cladding'>('all')
   const [formSent, setFormSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -118,21 +119,30 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
-    await sendConsultationToSupabase({
+    setFormError(null)
+
+    const result = await sendConsultationToSupabase({
       full_name: formData.name,
       phone: formData.phone,
       project_type: formData.projectType,
     })
+
     setSubmitting(false)
-    setFormSent(true)
-    setTimeout(() => {
-      setFormSent(false)
-      setFormData({
-        name: '',
-        phone: '',
-        projectType: 'طاولة طعام أو أثاث فاخر مخصص',
-      })
-    }, 5000)
+
+    if (result.success) {
+      setFormError(null)
+      setFormSent(true)
+      setTimeout(() => {
+        setFormSent(false)
+        setFormData({
+          name: '',
+          phone: '',
+          projectType: 'طاولة طعام أو أثاث فاخر مخصص',
+        })
+      }, 5000)
+    } else {
+      setFormError(result.error || 'تعذر إرسال الطلب (يرجى مراجعة صلاحيات قاعدة البيانات)')
+    }
   }
 
   return (
@@ -163,17 +173,6 @@ export default function Home() {
           <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-secondary/15 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative max-w-[1360px] mx-auto px-6 md:px-12 pt-14 pb-16 flex flex-col items-center text-center">
-            {/* Royal Heritage Badge */}
-            <div className="inline-flex items-center gap-2 bg-surface-container-high/15 backdrop-blur-md px-4 py-1.5 rounded-full shadow-xs mb-6 border border-[#d9b98c]/25">
-              <span className="w-2 h-2 rounded-full bg-[#c37c3b] animate-pulse"></span>
-              <span className="text-xs sm:text-sm text-secondary-container tracking-wider font-semibold">
-                صناعة يدوية سعودية فاخرة • منذ عام 1994
-              </span>
-              <span className="material-symbols-outlined text-[16px] text-secondary-container">
-                verified
-              </span>
-            </div>
-
             {/* Hero Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white max-w-5xl leading-tight mb-4 tracking-tight">
               فن النجارة الخالصة.. نحول أخشاب{' '}
@@ -286,15 +285,8 @@ export default function Home() {
                 </h2>
                 <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
                   ننتقي كتل الخشب الصلبة من غابات معتمدة عالمياً، وندخلها أفران التجفيف الرقمية
-                  لضبط الرطوبة لتلائم بيئة الخليج القاسية تماماً دون انحناء أو تشقق.
+                  لضبط الرطوبة لتلائم الظروف المناخية تماماً دون انحناء أو تشقق.
                 </p>
-              </div>
-
-              <div className="shrink-0 flex items-center gap-2 bg-surface-container-highest px-4 py-2 rounded-lg text-on-surface-variant text-xs sm:text-sm border border-outline-variant/30">
-                <span className="material-symbols-outlined text-secondary text-[22px]">
-                  thermostat
-                </span>
-                <span className="font-semibold">نسبة رطوبة داخلية متزنة: 8% - 10%</span>
               </div>
             </div>
 
@@ -707,17 +699,23 @@ export default function Home() {
                   </h3>
 
                   {formSent ? (
-                    <div className="bg-[#25d366]/20 border border-[#25d366]/40 p-4 rounded-xl text-center text-white">
+                    <div className="bg-[#25d366]/20 border border-[#25d366]/40 p-4 rounded-xl text-center text-white animate-fade">
                       <span className="material-symbols-outlined text-3xl text-[#25d366] block mb-1">
                         check_circle
                       </span>
-                      <p className="text-sm font-semibold">تم استلام طلبكم بنجاح!</p>
+                      <p className="text-sm font-semibold">تم استلام طلبكم بنجاح وحفظه في النظام!</p>
                       <p className="text-xs text-[#d2c4bf] mt-1">
                         سيتواصل معكم المعلم أبو الخير خلال 24 ساعة لمناقشة تفاصيل المشروع.
                       </p>
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-right">
+                      {formError && (
+                        <div className="bg-red-950/60 border border-red-500/40 p-2.5 rounded-xl text-right text-red-200 text-xs flex items-center gap-2">
+                          <span className="material-symbols-outlined text-[18px] text-red-400">error</span>
+                          <span>حدث خطأ أثناء إرسال الطلب، يمكنك استخدام زر الواتساب بالأسفل.</span>
+                        </div>
+                      )}
                       <div>
                         <label className="block text-xs text-[#d2c4bf] mb-1">الاسم الكريم</label>
                         <input
@@ -739,7 +737,7 @@ export default function Home() {
                           dir="ltr"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+966 50 000 0000"
+                          placeholder="+963 988 696 805"
                           className="w-full bg-[#fff9ef] text-primary px-3.5 py-2.5 rounded-lg text-xs sm:text-sm text-right focus:outline-none focus:ring-2 focus:ring-secondary-container"
                         />
                       </div>
@@ -761,31 +759,46 @@ export default function Home() {
                           <option>مشروع قصر أو فيلا متكامل</option>
                         </select>
                       </div>
-                      <button
-                        type="submit"
-                        disabled={submitting}
-                        className="mt-1 w-full bg-[#b87333] hover:bg-[#c37c3b] text-white py-2.5 px-4 rounded-lg text-sm font-semibold shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
-                      >
-                        {submitting ? (
-                          <>
-                            <span className="material-symbols-outlined text-[20px] animate-spin">
-                              progress_activity
-                            </span>
-                            <span>جارٍ إرسال الطلب...</span>
-                          </>
-                        ) : (
-                          <>
-                            <span>تواصل مع المعلم الآن</span>
-                            <span className="material-symbols-outlined text-[20px]">send</span>
-                          </>
-                        )}
-                      </button>
+
+                      <div className="flex flex-col gap-2 mt-1">
+                        <button
+                          type="submit"
+                          disabled={submitting}
+                          className="w-full bg-[#b87333] hover:bg-[#c37c3b] text-white py-2.5 px-4 rounded-lg text-sm font-semibold shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
+                        >
+                          {submitting ? (
+                            <>
+                              <span className="material-symbols-outlined text-[20px] animate-spin">
+                                progress_activity
+                              </span>
+                              <span>جارٍ إرسال الطلب...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>إرسال طلب الاستشارة</span>
+                              <span className="material-symbols-outlined text-[20px]">send</span>
+                            </>
+                          )}
+                        </button>
+
+                        <a
+                          href={`https://wa.me/963988696805?text=${encodeURIComponent(
+                            `مرحباً معلم أبو الخير، أود طلب استشارة وتفاصيل مشروع:\n- الاسم: ${formData.name || 'غير محدد'}\n- الهاتف: ${formData.phone || 'غير محدد'}\n- نوع المشروع: ${formData.projectType}`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full bg-[#25d366] hover:bg-[#20ba59] text-white py-2.5 px-4 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer text-center"
+                        >
+                          <span className="material-symbols-outlined text-[20px]">chat</span>
+                          <span>إرسال الطلب مباشرة عبر واتساب</span>
+                        </a>
+                      </div>
                     </form>
                   )}
 
                   <div className="pt-1 text-center">
                     <span className="text-[11px] text-[#d2c4bf]/80">
-                      أو زر ورشتنا في حي العارض، الرياض لمعاينة خشب الجوز والبلوط على الطبيعة
+                      أو زر ورشتنا في حي الإخلاص، المزة، دمشق لمعاينة خشب الجوز والبلوط على الطبيعة
                     </span>
                   </div>
                 </div>

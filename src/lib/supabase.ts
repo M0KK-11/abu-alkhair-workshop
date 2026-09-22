@@ -28,6 +28,17 @@ export interface OrderSubmission {
  * Inserts a consultation/order request directly into the `public.orders` table
  */
 export async function sendOrderToSupabase(payload: OrderSubmission) {
+  // Always back up to localStorage so client submissions are never lost
+  try {
+    if (typeof window !== 'undefined') {
+      const stored = JSON.parse(localStorage.getItem('abualkhair_orders') || '[]')
+      stored.push({ ...payload, submitted_at: new Date().toISOString() })
+      localStorage.setItem('abualkhair_orders', JSON.stringify(stored))
+    }
+  } catch {
+    // Ignore storage issues in restricted browsers
+  }
+
   try {
     const { data, error } = await supabase
       .from('orders')
@@ -43,18 +54,16 @@ export async function sendOrderToSupabase(payload: OrderSubmission) {
           sketch_file_url: payload.sketch_file_url || null,
         },
       ])
-      .select()
 
     if (error) {
       console.warn('Orders table notice:', error.message)
-      // Fallback attempt to messages table if needed
       return { success: false, error: error.message }
     }
 
     return { success: true, data }
-  } catch (err) {
+  } catch (err: any) {
     console.error('Unexpected Supabase error:', err)
-    return { success: false, error: String(err) }
+    return { success: false, error: err?.message || String(err) }
   }
 }
 

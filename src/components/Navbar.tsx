@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
 import Logo from './Logo'
+import { siteConfig } from '../config/site'
 
 const links = [
-  { to: '/', label: 'الرئيسية' },
-  { to: '/gallery', label: 'المعرض والأعمال' },
-  { to: '/work/royal-walnut-dining-table', label: 'تفاصيل العمل' },
-  { to: '/about', label: 'عن الورشة' },
-  { to: '/contact', label: 'تواصل معنا' },
+  { to: siteConfig.links.home, label: 'الرئيسية' },
+  { to: siteConfig.links.gallery, label: 'المعرض والأعمال' },
+  { to: siteConfig.links.about, label: 'عن الورشة' },
+  { to: siteConfig.links.contact, label: 'تواصل معنا' },
 ]
 
 export default function Navbar() {
@@ -50,11 +50,11 @@ export default function Navbar() {
           <div className="hidden md:flex flex-col text-left text-[#d2c4bf] leading-tight">
             <span className="text-[11px] text-[#d2c4bf]/70">اتصال مباشر</span>
             <a
-              href="tel:+966501234567"
+              href={siteConfig.contact.phoneTel}
               className="text-xs text-[#fff9ef] font-mono hover:text-oak transition-colors"
               dir="ltr"
             >
-              +966 50 123 4567
+              {siteConfig.contact.phoneFormatted}
             </a>
           </div>
 
@@ -103,9 +103,9 @@ export default function Navbar() {
           ))}
           <div className="pt-2 border-t border-[#d9b98c]/15 text-xs text-[#d2c4bf] flex items-center justify-between">
             <span>اتصال مباشر:</span>
-            <span className="font-mono text-[#fff9ef]" dir="ltr">
-              +966 50 123 4567
-            </span>
+            <a href="tel:+963988696805" className="font-mono text-[#fff9ef] hover:underline" dir="ltr">
+              +963 988 696 805
+            </a>
           </div>
         </div>
       )}

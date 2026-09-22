@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
+import { ImageLightbox } from '../components/ImageLightbox'
 
 interface GalleryProject {
   id: string
@@ -146,7 +147,7 @@ const galleryProjects: GalleryProject[] = [
   {
     id: 'p8',
     title: 'سرير نوم ماستر بتصميم طافي ومدمج مع أرفف وظهر جداري مسرّح',
-    projectContext: 'جناح فيلا الندى، الرياض',
+    projectContext: 'جناح فيلا خاصة، دمشق',
     categoryKey: 'closets',
     categoryLabel: 'خزائن وغرف ملابس',
     specialBadge: 'أجنحة فندقية وفيلا خاصة',
@@ -166,6 +167,11 @@ export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState<string>('all')
   const [loadingMore, setLoadingMore] = useState<boolean>(false)
   const [allLoaded, setAllLoaded] = useState<boolean>(false)
+  const [lightboxImage, setLightboxImage] = useState<{
+    src: string
+    alt: string
+    caption?: string
+  } | null>(null)
 
   const filteredProjects =
     activeFilter === 'all'
@@ -349,11 +355,26 @@ export default function Gallery() {
                               {p.projectContext}
                             </span>
                           )}
-                          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-1">
-                            {p.title}
-                          </h3>
                         </div>
                       )}
+
+                      {/* Fullscreen Preview Trigger */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          setLightboxImage({
+                            src: p.image,
+                            alt: p.alt,
+                            caption: `${p.title} — ${p.woodType}`,
+                          })
+                        }}
+                        className="absolute bottom-4 left-4 w-9 h-9 rounded-full bg-black/60 hover:bg-[#b87333] text-white flex items-center justify-center backdrop-blur-sm shadow-md transition-all cursor-pointer opacity-90 sm:opacity-0 sm:group-hover:opacity-100 z-10"
+                        title="تكبير ومعاينة الصورة"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">zoom_in</span>
+                      </button>
                     </div>
 
                     {/* Card Body */}
@@ -600,7 +621,7 @@ export default function Gallery() {
                 </h2>
                 <p className="text-xs sm:text-sm text-[#d2c4bf] mt-2 leading-relaxed">
                   المس عينات خشب الجوز والسنديان والتيك، واكتشف خيارات التطعيم بالنحاس وأقفال الدرج
-                  الذكية برفقة المعلم أبو الخير وكبار الحرفيين لدينا في الرياض.
+                  الذكية برفقة المعلم أبو الخير وكبار الحرفيين لدينا في دمشق.
                 </p>
                 <div className="flex flex-wrap items-center gap-4 mt-4 text-xs text-[#d2c4bf]/90">
                   <div className="flex items-center gap-1.5">
@@ -629,7 +650,7 @@ export default function Gallery() {
                 </Link>
 
                 <a
-                  href="https://wa.me/966501234567"
+                  href="https://wa.me/963988696805"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors text-center"
@@ -641,6 +662,15 @@ export default function Gallery() {
             </div>
           </div>
         </section>
+
+        {/* Fullscreen Lightbox Modal */}
+        <ImageLightbox
+          isOpen={!!lightboxImage}
+          src={lightboxImage?.src || ''}
+          alt={lightboxImage?.alt || ''}
+          caption={lightboxImage?.caption}
+          onClose={() => setLightboxImage(null)}
+        />
       </div>
     </div>
   )

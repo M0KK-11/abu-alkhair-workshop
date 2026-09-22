@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { getWork, works } from '../lib/works'
+import { ImageLightbox } from '../components/ImageLightbox'
 
 interface ShowcaseAngle {
   id: string
@@ -67,6 +68,7 @@ export default function WorkDetail() {
   const [activeImage, setActiveImage] = useState<string>(angles[0].image)
   const [activeAlt, setActiveAlt] = useState<string>(angles[0].alt)
   const [fading, setFading] = useState<boolean>(false)
+  const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false)
 
   const handleAngleChange = (angle: ShowcaseAngle) => {
     setFading(true)
@@ -160,13 +162,13 @@ export default function WorkDetail() {
               <div className="lg:col-span-8 flex flex-col gap-2">
                 <div className="flex items-center gap-1.5 text-secondary font-medium text-sm">
                   <span className="material-symbols-outlined text-[18px]">verified</span>
-                  <span>مشروع سكني خاص • الرياض</span>
+                  <span>مشروع سكني خاص • دمشق</span>
                 </div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary tracking-tight leading-tight">
                   طاولة طعام ملكية بقصّة حية (Live Edge) ومقاعد منجدة بالجلد الطبيعي
                 </h1>
                 <p className="text-sm sm:text-base text-on-surface-variant max-w-3xl leading-relaxed mt-1">
-                  صُممت هذه القطعة خصيصاً لفيلا خاصة بالرياض، باستخدام لوحين متقابلين من شجرة
+                  صُممت هذه القطعة خصيصاً لفيلا خاصة بدمشق، باستخدام لوحين متقابلين من شجرة
                   جوز أمريكي معمرة، مع صقل يدوي بزيوت طبيعية عضوية خالية من الكيماويات الضارة،
                   لتكون محوراً عمرانياً دافئاً يجمع العائلة لأجيال.
                 </p>
@@ -197,11 +199,23 @@ export default function WorkDetail() {
                   id="mainShowcaseImage"
                   src={activeImage}
                   alt={activeAlt}
-                  className={`w-full h-full object-cover transition-all duration-500 hover:scale-[1.01] ${
+                  onClick={() => setIsLightboxOpen(true)}
+                  className={`w-full h-full object-cover transition-all duration-500 hover:scale-[1.01] cursor-zoom-in ${
                     fading ? 'opacity-40 scale-[0.99]' : 'opacity-100 scale-100'
                   }`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/75 via-transparent to-transparent pointer-events-none"></div>
+
+                {/* Top-left Quick Zoom button */}
+                <button
+                  type="button"
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="absolute top-4 left-4 z-10 inline-flex items-center gap-2 bg-black/60 hover:bg-[#b87333] text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium backdrop-blur-md shadow-md transition-all cursor-pointer"
+                  title="تكبير ومعاينة الصورة بالحجم الكامل"
+                >
+                  <span className="material-symbols-outlined text-[18px]">zoom_in</span>
+                  <span>معاينة مكبّرة للتفاصيل</span>
+                </button>
 
                 {/* Bottom Floating Highlights Overlay */}
                 <div className="absolute bottom-4 right-4 left-4 flex flex-wrap items-end justify-between gap-2 text-white">
@@ -555,7 +569,7 @@ export default function WorkDetail() {
                 </Link>
 
                 <a
-                  href="https://wa.me/966501234567?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%B7%D8%A7%D9%88%D9%84%D8%A9%20%D8%A7%D9%84%D8%B7%D8%B9%D8%A7%D9%85%20%D8%A7%D9%84%D9%85%D9%84%D9%83%D9%8A%D8%A9%20%D9%85%D8%B1%D8%AC%D8%B9%20AK-9042"
+                  href="https://wa.me/963988696805?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%B7%D8%A7%D9%88%D9%84%D8%A9%20%D8%A7%D9%84%D8%B7%D8%B9%D8%A7%D9%85%20%D8%A7%D9%84%D9%85%D9%84%D9%83%D9%8A%D8%A9%20%D9%85%D8%B1%D8%AC%D8%B9%20AK-9042"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors text-center"
@@ -635,6 +649,15 @@ export default function WorkDetail() {
             </div>
           </div>
         </section>
+
+        {/* Fullscreen Lightbox Modal */}
+        <ImageLightbox
+          isOpen={isLightboxOpen}
+          src={activeImage}
+          alt={activeAlt}
+          caption={`${currentWork.title} — معاينة التفاصيل الحرفية`}
+          onClose={() => setIsLightboxOpen(false)}
+        />
       </div>
     </div>
   )

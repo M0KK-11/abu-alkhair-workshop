@@ -1,3 +1,5 @@
+import { siteConfig } from '../config/site'
+
 export default function WhatsAppButton() {
   return (
     <div className="fixed bottom-6 left-6 z-50 flex items-center group">
@@ -8,7 +10,7 @@ export default function WhatsAppButton() {
 
       <a
         aria-label="WhatsApp"
-        href="https://wa.me/966501234567"
+        href={siteConfig.contact.whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="w-14 h-14 rounded-full bg-[#25d366] text-white flex items-center justify-center shadow-[0_8px_24px_rgba(37,211,102,0.4)] hover:shadow-[0_12px_28px_rgba(37,211,102,0.6)] hover:scale-105 transition-transform"

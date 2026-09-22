@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import Logo from './Logo'
+import { siteConfig } from '../config/site'
 
 export default function Footer() {
   return (
@@ -9,8 +10,7 @@ export default function Footer() {
         <div className="flex flex-col gap-4">
           <Logo variant="light" showSubtitle={true} />
           <p className="text-sm text-[#d2c4bf] leading-relaxed mt-2">
-            صياغة معمارية راقية للأخشاب الطبيعية تجمع الدقة اليابانية والأناقة
-            الإسكندنافية وأصالة التراث العربي لابتكار قطع فنية خالدة.
+            {siteConfig.description}
           </p>
           <div className="flex items-center gap-3 pt-2">
             <a
@@ -67,7 +67,7 @@ export default function Footer() {
               location_on
             </span>
             <span className="text-sm leading-relaxed">
-              المملكة العربية السعودية، الرياض - حي العارض، مجمع الورش والواحات الصناعية الفاخرة
+              {siteConfig.address}
             </span>
           </div>
           <div className="flex items-start gap-2.5 text-[#d2c4bf] mt-2">
@@ -78,8 +78,7 @@ export default function Footer() {
               <span className="text-xs font-semibold text-[#fff9ef]">
                 أوقات العمل واستقبال الاستشارات
               </span>
-              <span className="text-sm">السبت - الخميس: 9:00 ص - 9:00 م</span>
-              <span className="text-[11px] text-[#d2c4bf]/60">الجمعة مغلق للأعمال التحضيرية</span>
+              <span className="text-sm">{siteConfig.workingHours.full}</span>
             </div>
           </div>
         </div>
@@ -88,22 +87,22 @@ export default function Footer() {
         <div className="flex flex-col gap-3">
           <span className="text-base font-bold text-[#fff9ef] mb-1">التواصل المباشر</span>
           <p className="text-sm leading-relaxed">
-            نرحب بزيارة المعماريين وأصحاب المنازل لمعاينة عينات الأخشاب وحلول النجارة الدقيقة.
+            نرحب بزيارة المهندسين وأصحاب المنازل لمعاينة عينات الأخشاب وحلول النجارة الدقيقة.
           </p>
           <div className="flex flex-col gap-2 pt-2 text-xs sm:text-sm text-[#fff9ef]">
             <a
-              href="tel:+966501234567"
+              href={siteConfig.contact.phoneTel}
               className="flex items-center gap-2 hover:text-oak transition-colors"
             >
               <span className="material-symbols-outlined text-[18px] text-[#b87333]">call</span>
-              <span dir="ltr">+966 50 123 4567</span>
+              <span dir="ltr">{siteConfig.contact.phoneFormatted}</span>
             </a>
             <a
-              href="mailto:atelier@abukhairwood.sa"
+              href={siteConfig.contact.emailMailto}
               className="flex items-center gap-2 hover:text-oak transition-colors"
             >
               <span className="material-symbols-outlined text-[18px] text-[#b87333]">mail</span>
-              <span>atelier@abukhairwood.sa</span>
+              <span>{siteConfig.contact.email}</span>
             </a>
           </div>
         </div>

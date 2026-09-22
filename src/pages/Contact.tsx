@@ -12,7 +12,7 @@ const faqs = [
   {
     id: 1,
     q: 'هل توفرون خدمة أخذ المقاسات في الموقع مباشرة؟',
-    a: 'نعم، بكل تأكيد. بعد الاتفاق المبدئي على نوعية الخشب والتقدير التقريبي، يزور فريق المسح الهندسي موقعكم في الرياض أو المناطق المجاورة لرفع المقاسات بدقة متناهية بأجهزة المسح الليزري، وفحص استواء الجدران والأرضيات ومستوى الرطوبة.',
+    a: 'نعم، بكل تأكيد. بعد الاتفاق المبدئي على نوعية الخشب والتقدير التقريبي، يزور فريق المسح الهندسي موقعكم في دمشق أو المحافظات السورية لرفع المقاسات بدقة متناهية بأجهزة المسح الليزري، وفحص استواء الجدران والأرضيات ومستوى الرطوبة.',
   },
   {
     id: 2,
@@ -29,8 +29,8 @@ const faqs = [
   },
   {
     id: 4,
-    q: 'هل تشحنون وتنفذون أعمال خارج مدينة الرياض؟',
-    a: 'نعم، ننفذ مشاريع الفلل والقصور والمشاريع السكنية والضيافة في جميع مدن المملكة (جدة، الخبر، العلا، أبها، وغيرها)، بالإضافة إلى دول مجلس التعاون الخليجي. يتم تغليف المشغولات بصناديق خشبية مبطنة وتكليف فريق تركيب متخصص من الورشة للإشراف على التثبيت في الموقع.',
+    q: 'هل تشحنون وتنفذون أعمال خارج مدينة دمشق؟',
+    a: 'نعم، ننفذ مشاريع الفلل والشقق والمشاريع السكنية والتجارية في جميع المحافظات السورية (ريف دمشق، حمص، حلب، اللاذقية، طرطوس وغيرها). يتم تغليف المشغولات بصناديق خشبية مبطنة وتكليف فريق تركيب متخصص من الورشة للإشراف على التثبيت في الموقع.',
   },
 ]
 
@@ -46,6 +46,7 @@ export default function Contact() {
   const [attachedFile, setAttachedFile] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [openFaq, setOpenFaq] = useState<number | null>(1)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -63,7 +64,9 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await sendConsultationToSupabase({
+    setErrorMessage(null)
+
+    const result = await sendConsultationToSupabase({
       full_name: formData.fullName,
       phone: formData.phone,
       email: formData.email,
@@ -72,8 +75,15 @@ export default function Contact() {
       project_notes: formData.projectNotes,
       sketch_file_url: attachedFile || undefined,
     })
+
     setLoading(false)
-    setSubmitted(true)
+
+    if (result.success) {
+      setErrorMessage(null)
+      setSubmitted(true)
+    } else {
+      setErrorMessage(result.error || 'تعذر حفظ الطلب في قاعدة البيانات (401 Unauthorized)')
+    }
   }
 
   const handleReset = () => {
@@ -87,6 +97,7 @@ export default function Contact() {
     })
     setAttachedFile(null)
     setSubmitted(false)
+    setErrorMessage(null)
   }
 
   const toggleFaq = (id: number) => {
@@ -186,7 +197,7 @@ export default function Contact() {
                           رقم الجوال <span className="text-red-500">*</span>
                         </span>
                         <span className="text-xs text-on-surface-variant font-mono" dir="ltr">
-                          +966
+                          +963
                         </span>
                       </label>
                       <div className="relative">
@@ -198,7 +209,7 @@ export default function Contact() {
                           onChange={(e) =>
                             setFormData({ ...formData, phone: e.target.value })
                           }
-                          placeholder="050 123 4567"
+                          placeholder="0988 696 805"
                           className="w-full text-right bg-surface-container rounded-xl p-3 text-xs sm:text-sm text-on-surface focus:outline-none focus:bg-surface-container-lowest transition-colors pl-10 border border-outline-variant/20"
                         />
                         <span className="material-symbols-outlined text-outline absolute left-3 top-3 text-[20px] pointer-events-none">
@@ -339,8 +350,16 @@ export default function Contact() {
                     </label>
                   </div>
 
-                  {/* Submit Action */}
-                  <div className="pt-2">
+                  {/* Error Notification Alert */}
+                  {errorMessage && (
+                    <div className="bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-800 p-3.5 rounded-xl text-right flex items-center gap-2 text-red-700 dark:text-red-300 font-bold text-sm animate-fade">
+                      <span className="material-symbols-outlined text-[20px]">error</span>
+                      <span>حدث خطأ أثناء إرسال الطلب. يمكنك المحاولة مجدداً أو المراسلة عبر واتساب مباشرة.</span>
+                    </div>
+                  )}
+
+                  {/* Submit Actions */}
+                  <div className="pt-2 flex flex-col gap-2.5">
                     <button
                       type="submit"
                       disabled={loading}
@@ -362,7 +381,20 @@ export default function Contact() {
                         </>
                       )}
                     </button>
-                    <p className="text-[11px] text-center text-on-surface-variant mt-2 leading-relaxed">
+
+                    <a
+                      href={`https://wa.me/963988696805?text=${encodeURIComponent(
+                        `مرحباً ورشة أبو الخير، أود إرسال تفاصيل مشروعي:\n- الاسم: ${formData.fullName || 'غير محدد'}\n- الهاتف: ${formData.phone || 'غير محدد'}\n- نوع العمل: ${formData.projectType || 'عام'}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-[#25d366] hover:bg-[#20ba59] text-white py-3 px-6 rounded-xl text-sm sm:text-base font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer text-center"
+                    >
+                      <span className="material-symbols-outlined text-[22px]">chat</span>
+                      <span>إرسال الطلب مباشرة عبر واتساب</span>
+                    </a>
+
+                    <p className="text-[11px] text-center text-on-surface-variant mt-1 leading-relaxed">
                       بإرسال هذا النموذج، ستتلقى مكالمة من كبير الحرفيين أو المهندس المسؤول للمناقشة
                       وتحديد موعد معاينة.
                     </p>
@@ -426,19 +458,19 @@ export default function Contact() {
                         </div>
                         <div className="flex flex-col text-right">
                           <span className="text-[11px] text-secondary-fixed-dim">
-                            الهاتف المباشر للإدارة
+                            الاتصال المباشر
                           </span>
                           <span
                             className="text-xs sm:text-sm text-white font-mono tracking-wide"
                             dir="ltr"
                           >
-                            +966 11 234 5678
+                            +963 988 696 805
                           </span>
                         </div>
                       </div>
                       <a
-                        href="tel:+966112345678"
-                        aria-label="Call Landline"
+                        href="tel:+963988696805"
+                        aria-label="Call Mobile"
                         className="text-secondary-fixed hover:text-white transition-colors p-2"
                       >
                         <span className="material-symbols-outlined text-[20px]">call</span>
@@ -459,12 +491,12 @@ export default function Contact() {
                             className="text-xs sm:text-sm text-white font-mono tracking-wide"
                             dir="ltr"
                           >
-                            +966 50 123 4567
+                            +963 988 696 805
                           </span>
                         </div>
                       </div>
                       <a
-                        href="https://wa.me/966501234567"
+                        href="https://wa.me/963988696805"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Chat WhatsApp"
@@ -484,15 +516,15 @@ export default function Contact() {
                         </div>
                         <div className="flex flex-col text-right">
                           <span className="text-[11px] text-secondary-fixed-dim">
-                            البريد الهندسي والاعتمادات
+                            البريد والتنسيق
                           </span>
                           <span className="text-xs sm:text-sm text-white font-mono" dir="ltr">
-                            info@abualkhair-wood.sa
+                            info@abualkhair-wood.com
                           </span>
                         </div>
                       </div>
                       <a
-                        href="mailto:info@abualkhair-wood.sa"
+                        href="mailto:info@abualkhair-wood.com"
                         aria-label="Send Mail"
                         className="text-secondary-fixed hover:text-white transition-colors p-2"
                       >
@@ -507,12 +539,14 @@ export default function Contact() {
                       </span>
                       <div className="flex flex-col text-right">
                         <span className="text-xs sm:text-sm text-white font-semibold">
-                          العنوان وصالة العرض المركزية
+                          عنوان الورشة والمعمل
                         </span>
                         <p className="text-xs text-secondary-fixed-dim leading-relaxed mt-0.5">
-                          المملكة العربية السعودية، الرياض - منطقة الورش والصناعات الحرفية الفاخرة -
-                          مخرج 8، شارع حرفيي الخشب.
+                          سوريا، دمشق - المزة، حي الإخلاص
                         </p>
+                        <span className="text-[11px] font-mono text-secondary-fixed mt-1" dir="ltr">
+                          33.504990, 36.265369
+                        </span>
                       </div>
                     </div>
 
@@ -527,9 +561,6 @@ export default function Contact() {
                         </span>
                         <span className="text-xs text-secondary-fixed-dim mt-0.5">
                           من السبت إلى الخميس: 9:00 صباحاً – 9:00 مساءً
-                        </span>
-                        <span className="text-[11px] text-secondary-fixed-dim/70 mt-0.5">
-                          الجمعة: مخصص للأعمال المعملية والتجهيز الفني
                         </span>
                       </div>
                     </div>
@@ -559,11 +590,11 @@ export default function Contact() {
                     <div className="flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-[#b87333]">explore</span>
                       <span className="text-sm sm:text-base font-bold text-on-surface">
-                        موقع المصنع وصالة النماذج
+                        موقع الورشة على الخريطة
                       </span>
                     </div>
                     <a
-                      href="https://maps.google.com"
+                      href="https://www.google.com/maps/search/?api=1&query=33.504990,36.265369"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-secondary hover:underline flex items-center gap-1 font-semibold"
@@ -573,27 +604,21 @@ export default function Contact() {
                     </a>
                   </div>
 
-                  {/* Map Graphic Preview with Bouncing Marker */}
-                  <div
-                    className="w-full h-56 rounded-xl overflow-hidden bg-surface-container relative shadow-inner bg-cover bg-center border border-outline-variant/30"
-                    style={{
-                      backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuA-XOnsgBAphhapuYPVumTepDQ0ffj6zW9RzidlCXGghzD78Diw9hY4DU_D6RyowyS5Wrm6ypfQ6JtuE75awaSs-oSAoe0rpjUYUm05Nkcp5aIVLXBehfGWxOwQnFB77c4tRSkVTXgnETNRx1_ZrfxD1y0LXhjE4hkv2ZBX_TPFifdG76C3MrnWH13zFKqTAympb5gaActZIiP2kVEUzVSrE3k__cRo3DCRA_D9ak7gO47rwUUkzAgK')`,
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-primary/20 pointer-events-none"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-                      <div className="w-10 h-10 rounded-full bg-[#b87333] text-white flex items-center justify-center shadow-lg animate-bounce">
-                        <span className="material-symbols-outlined text-[24px]">carpenter</span>
-                      </div>
-                      <div className="bg-primary-container text-white text-[11px] px-2.5 py-1 rounded-md shadow-md mt-1 whitespace-nowrap font-bold border border-[#d9b98c]/30">
-                        ورشة أبو الخير المركزية
-                      </div>
-                    </div>
+                  {/* Interactive Google Maps Iframe */}
+                  <div className="w-full h-64 rounded-xl overflow-hidden bg-surface-container relative shadow-inner border border-outline-variant/30">
+                    <iframe
+                      title="موقع ورشة أبو الخير - دمشق المزة حي الإخلاص"
+                      src="https://maps.google.com/maps?q=33.504990,36.265369&hl=ar&z=16&output=embed"
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
                   </div>
 
-                  <p className="text-[11px] text-on-surface-variant text-center font-medium">
-                    يتوفر مواقف سيارات خاصة لعملاء الاستشارات وممثلي المكاتب الهندسية.
-                  </p>
+                  <div className="flex items-center justify-between text-[11px] text-on-surface-variant font-medium pt-1">
+                    <span>حي الإخلاص، المزة، دمشق</span>
+                    <span className="font-mono text-secondary" dir="ltr">33.504990, 36.265369</span>
+                  </div>
                 </div>
               </div>
             </div>
