@@ -26,7 +26,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden xl:flex items-center gap-7">
+        <nav className="hidden md:flex items-center gap-4 lg:gap-7">
           {links.map((l) => (
             <NavLink
               key={l.to}
@@ -47,7 +47,7 @@ export default function Navbar() {
 
         {/* Action Call & CTA */}
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex flex-col text-left text-[#d2c4bf] leading-tight">
+          <div className="hidden lg:flex flex-col text-left text-[#d2c4bf] leading-tight">
             <span className="text-[11px] text-[#d2c4bf]/70">اتصال مباشر</span>
             <a
               href={siteConfig.contact.phoneTel}
@@ -70,7 +70,7 @@ export default function Navbar() {
           {/* Mobile hamburger menu toggle */}
           <button
             type="button"
-            className="xl:hidden p-2 text-[#fff9ef] rounded-md focus:outline-none"
+            className="md:hidden p-2 text-[#fff9ef] rounded-md focus:outline-none"
             onClick={() => setOpen((prev) => !prev)}
             aria-label="القائمة"
           >
@@ -83,7 +83,7 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       {open && (
-        <div className="xl:hidden bg-primary-container border-b border-[#d9b98c]/25 px-6 py-4 space-y-2">
+        <div className="md:hidden bg-primary-container border-b border-[#d9b98c]/25 px-6 py-4 space-y-2">
           {links.map((l) => (
             <NavLink
               key={l.to}

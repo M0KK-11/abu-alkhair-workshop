@@ -1,108 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
 import { sendConsultationToSupabase } from '../lib/supabase'
-
-interface FeaturedProject {
-  id: string
-  title: string
-  category: string
-  filterType: 'custom-furniture' | 'doors-cladding'
-  spec: string
-  specIcon: string
-  description: string
-  image: string
-  alt: string
-  link: string
-}
-
-const featuredProjects: FeaturedProject[] = [
-  {
-    id: 'f1',
-    title: 'طاولة طعام ملكية من الجوز المصمت',
-    category: 'أثاث فاخر',
-    filterType: 'custom-furniture',
-    spec: 'طول 4.2 متر',
-    specIcon: 'straighten',
-    description:
-      'لوح خشبي متصل بسماكة 8 سم منتقى بعناية مع أرجل برونزية مشغولة يدوياً بتشطيب عتيق غير لامع.',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBSeEciRR0d9_7Eg3AQJz5ec-GCULeuj7ydbgoIqXKSUHM4W-q87CllcKIbrJTizOA4Oob5iRWQ6Fq1usp4aEv7-2d4Bo5MDaLGM3qFxW0GSuKUB1IfrfUJAsxIdr7RjxwRetwKGKfOlw2Vv_O7pYxzt7kS72GSvveJb7DD4E-_8EZGBoeNCHdF3sUx2-7KPWy-HPu_GpN7vKWmt8kkhf5QMpEJdcd_9QiY5ZqOz9-p6r1M3ctJefKu',
-    alt: 'Monolithic solid American Walnut dining table with live natural edges and sculptural brass base legs',
-    link: '/work/royal-walnut-dining-table',
-  },
-  {
-    id: 'f2',
-    title: 'تجليد جداري بانورامي ومكتبة خاصة',
-    category: 'ديكورات خشبية ومعمارية',
-    filterType: 'doors-cladding',
-    spec: 'المزة، دمشق',
-    specIcon: 'pin_drop',
-    description:
-      'تكسية جدارية هندسية تمتد بارتفاع مزدوج (Double Height) مدمجة مع نظام تكييف مخفي وإضاءات محيطية.',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuB3DdhQetkL0FMx1u5t3foP5UCh3cYZpwpS_0JBgS0t3yKfzQpQvssowkIQY6d49awHo4hXN_EuQLdSobHsUqx7kh7HHJmYsptYsZ1VKbNrtMlLhMRYOtyvfk-UHQEExG3I08FZ5N1HblcYj-qU5hvxtfv--JnX_70iDRGV868rVUj5PAYqMZBwwy2GHNd2nWLaM--IMirVamIYh_ci4PszsWN39S7XOeZLJ2yW6M6GkfKaTut-tSQ9',
-    alt: 'Floor to ceiling architectural wood paneling and integrated library shelving in dark smoked oak',
-    link: '/work/royal-walnut-dining-table',
-  },
-  {
-    id: 'f3',
-    title: 'مطبخ عصري مدمج من خشب البلوط',
-    category: 'مطابخ حصرية',
-    filterType: 'custom-furniture',
-    spec: 'مفصلات نحاسية مخفية',
-    specIcon: 'construction',
-    description:
-      'تصميم مينيمالي انسيابي مع واجهات خشب بلوط معالجة بنانو التفلون لحمايتها من السوائل والحرارة.',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAN6HrEuvGCY6Jbr4O8D7HDDav7bGe9z3fyR34uQk_NccrmsSpcBJvrQa_8Q8HthDSsFXs0XXpsTfjsZ8IKTdzXar6fGexC0vvRlO9eZNOpjo13PPEuCIT5OvX1n9OtYtzHPWs2iuwzhBs30XJWNHE-cBgC92GX3SD4dgcvdN2QjssWkLpTF8p5m7CppmPK-LAhL-wWJY27uSJSN6Igeml66by91kMoFSrBcC760XlW9b67Tr-zXuvE',
-    alt: 'Seamless contemporary kitchen island and bespoke cabinetry made from Swiss white oak',
-    link: '/work/royal-walnut-dining-table',
-  },
-  {
-    id: 'f4',
-    title: 'باب رئيسي خارجي ضخم من التيك الصاج',
-    category: 'أبواب خارجية فاخرة',
-    filterType: 'doors-cladding',
-    spec: 'نظام محوري Pivot إيطالي',
-    specIcon: 'lock',
-    description:
-      'بارتفاع 4 أمتار ونظام دوران هيدروليكي محوري يتحمل حتى 800 كجم بسلاسة متناهية، مقاوم كلياً للشمس والغبار.',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuA20OpqlmrU14PoKzqpt25XqDNEOqT54L_QMSpdEutf2UrgEWBml7ggivCGD7-Qc0x4R2yPM8SW2py8njVJwu2TmBxzyF1k206rKFo7hMTG6JWXo-NXsOH791YAhaFjyLmJe_v1saVAD2SH-7mbgi5ANyChzUe6wOkzELe3tY2AO8wTnyZ9zEhm-zmpNbSoIcsUJqIPw2ODRygF1_bqVAFuDdrs6YFY5cXZNijlfssoRhH2MhhzQRwk',
-    alt: 'Grand front entrance pivot door for luxury modern palace in solid Burmese Teak timber',
-    link: '/work/royal-walnut-dining-table',
-  },
-  {
-    id: 'f5',
-    title: 'خزانة ملابس (Walk-in Closet) مع أدراج مخملية',
-    category: 'غرف وخزائن خاصة',
-    filterType: 'custom-furniture',
-    spec: 'إضاءات سينمائية مخفية',
-    specIcon: 'flare',
-    description:
-      'تقسيمات ذكية مصنوعة من خشب الأرز المعطر مع أدراج مكسوة بالمخمل الإيطالي وواجهات زجاجية عاكسة.',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCtFRgVnZAYiALTyEzldHhctO9GmFzY93EZbfl8T9kZF3I8fIMXurzRVy6Xt_1YIg_wcbOzKjGNJGzZAbflSAZLeVzDDGyl6tdInrG1rqXMxSZC13Z_KUPRYM7IzHXNHgfDdZcRiXTX9sIVdgtjVJEYfyZDbLF3ZDUuqt8FZnKT8UvFsI6EuiUxCxeouGuJ8DnHlXresh0LY-Un0nJ3HV8RXJL1A3RR7-x2AmH_Jtobst6I2bkaJvJa',
-    alt: 'Bespoke walk in wardrobe dressing room with dark stained solid wood frames and velvet drawers',
-    link: '/work/royal-walnut-dining-table',
-  },
-  {
-    id: 'f6',
-    title: 'كونسول مدخل منحوت بتعشيقات يابانية',
-    category: 'قطع فنية مخصصة',
-    filterType: 'custom-furniture',
-    spec: 'تعشيقة خشبية بدون مسامير',
-    specIcon: 'handyman',
-    description:
-      'تحفة فنية تحتفي بفن النجارة التقليدي (Kigumi)؛ ثبات فائق ودقة ميكانيكية اعتماداً على تداخل الألياف الخشبية فقط.',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuC8lsha0-EvA7iOrnzOV-aR3xDc8WmEc4IhB9kmgubJi-0_pE9yvx_rCg0mZGbD_2eyCrZrQYP0ytMHvZrOlkto5qeCidcXTB_7bWDcZ_xE0i5-pp1IAbdZFzHBa5g1U_IlUbw5hCrBKeTqBwG3p755HOStAi9BriJYgecdW-eG8mZJrBs-YCCl0nEUwddTAa0zyHCELw3muE7jwK9p6iwbX03_PDfXSTKIIe3-8nfzSjP9MSFeS08O',
-    alt: 'Artisanal entryway console table carved from solid aged walnut with exposed kigumi Japanese wood joints',
-    link: '/work/royal-walnut-dining-table',
-  },
-]
+import { fetchWorks, Work } from '../lib/works'
 
 export default function Home() {
+  const [works, setWorks] = useState<Work[]>([])
+  const [loadingWorks, setLoadingWorks] = useState<boolean>(true)
   const [filter, setFilter] = useState<'all' | 'custom-furniture' | 'doors-cladding'>('all')
   const [formSent, setFormSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -113,8 +16,33 @@ export default function Home() {
     projectType: 'طاولة طعام أو أثاث فاخر مخصص',
   })
 
+  useEffect(() => {
+    async function loadFeatured() {
+      setLoadingWorks(true)
+      try {
+        const data = await fetchWorks()
+        setWorks(data)
+      } catch (err) {
+        console.error('Error fetching home works:', err)
+      } finally {
+        setLoadingWorks(false)
+      }
+    }
+    loadFeatured()
+  }, [])
+
   const filteredProjects =
-    filter === 'all' ? featuredProjects : featuredProjects.filter((p) => p.filterType === filter)
+    filter === 'all'
+      ? works.slice(0, 6)
+      : works.filter((w) => {
+          if (filter === 'custom-furniture') {
+            return w.category.includes('أثاث') || w.category.includes('طاولات') || w.category.includes('خزائن')
+          }
+          if (filter === 'doors-cladding') {
+            return w.category.includes('أبواب') || w.category.includes('تجليد') || w.category.includes('ديكور')
+          }
+          return true
+        }).slice(0, 6)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -174,13 +102,13 @@ export default function Home() {
 
           <div className="relative max-w-[1360px] mx-auto px-6 md:px-12 pt-14 pb-16 flex flex-col items-center text-center">
             {/* Hero Headline */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white max-w-5xl leading-tight mb-4 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-white max-w-4xl leading-snug md:leading-normal mb-3 tracking-tight">
               فن النجارة الخالصة.. نحول أخشاب{' '}
               <span className="text-secondary-container">البلوط والجوز</span> إلى تحف معمارية خالدة
             </h1>
 
             {/* Hero Subtitle */}
-            <p className="text-sm sm:text-base md:text-lg text-[#d2c4bf] max-w-3xl leading-relaxed mb-8">
+            <p className="text-xs sm:text-sm md:text-base text-[#d2c4bf] max-w-2xl leading-relaxed mb-6">
               نبتكر أثاثاً مخصصاً، تجاليد جدارية معمارية، وأبواباً ملكية تدمج عبق الحرفة اليدوية
               الأصلية بأدق تفاصيل الهندسة الإسكندنافية والتعشيقات اليابانية المتينة.
             </p>
@@ -464,48 +392,103 @@ export default function Home() {
             </div>
 
             {/* 6 Featured Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((p) => (
-                <article
-                  key={p.id}
-                  className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group border border-outline-variant/30"
+            {loadingWorks && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3].map((n) => (
+                  <div
+                    key={n}
+                    className="animate-pulse bg-surface-container-lowest rounded-2xl overflow-hidden border border-outline-variant/30 flex flex-col h-80"
+                  >
+                    <div className="h-48 bg-surface-container-high/60 w-full" />
+                    <div className="p-5 flex flex-col gap-2">
+                      <div className="h-4 bg-surface-container-high/80 rounded w-2/3" />
+                      <div className="h-3 bg-surface-container-high/50 rounded w-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!loadingWorks && filteredProjects.length === 0 && (
+              <div className="py-12 px-6 text-center max-w-md mx-auto bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-xs flex flex-col items-center">
+                <div className="w-14 h-14 rounded-2xl bg-[#b87333]/15 text-[#b87333] flex items-center justify-center mb-3">
+                  <span className="material-symbols-outlined text-3xl">carpenter</span>
+                </div>
+                <h3 className="text-lg font-bold text-primary mb-1">
+                  أعمال معمارية حصرية قيد التوثيق
+                </h3>
+                <p className="text-xs sm:text-sm text-on-surface-variant mb-5 leading-relaxed">
+                  يتم العمل على تحديث صور المشاريع من الورشة. يمكنك طلب تفصيل قطعتك الخاصة وفق أرقى المعايير.
+                </p>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 bg-[#b87333] hover:bg-[#c37c3b] text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-xs"
                 >
-                  <div className="relative h-72 overflow-hidden bg-surface-container">
-                    <img
-                      src={p.image}
-                      alt={p.alt}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 right-3 bg-primary/80 backdrop-blur-md text-white px-3 py-1 rounded-md text-xs font-semibold">
-                      {p.category}
+                  <span className="material-symbols-outlined text-[18px]">add_task</span>
+                  <span>طلب تفصيل مخصص</span>
+                </Link>
+              </div>
+            )}
+
+            {!loadingWorks && filteredProjects.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProjects.map((p) => (
+                  <article
+                    key={p.id}
+                    className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group border border-outline-variant/30"
+                  >
+                    <div className="relative h-72 overflow-hidden bg-surface-container">
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                        <span className="bg-primary/80 backdrop-blur-md text-white px-3 py-1 rounded-md text-xs font-semibold">
+                          {p.category}
+                        </span>
+                        {p.is_featured && (
+                          <span
+                            className="bg-[#b87333]/95 text-amber-300 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1 shadow-sm border border-amber-400/30"
+                            title="عمل مميز"
+                          >
+                            <span
+                              className="material-symbols-outlined text-[14px]"
+                              style={{ fontVariationSettings: "'FILL' 1" }}
+                            >
+                              star
+                            </span>
+                            <span className="text-white text-[10px]">مميز</span>
+                          </span>
+                        )}
+                      </div>
+                      <div className="absolute bottom-3 left-3 bg-surface-container-highest/90 text-primary px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-xs">
+                        <span className="material-symbols-outlined text-[14px]">eco</span>
+                        <span>{p.material}</span>
+                      </div>
                     </div>
-                    <div className="absolute bottom-3 left-3 bg-surface-container-highest/90 text-primary px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-xs">
-                      <span className="material-symbols-outlined text-[14px]">{p.specIcon}</span>
-                      <span>{p.spec}</span>
+                    <div className="p-5 flex flex-col flex-1 justify-between gap-4 text-right">
+                      <div>
+                        <Link to={`/work/${p.slug}`}>
+                          <h3 className="text-base sm:text-lg font-bold text-primary group-hover:text-secondary transition-colors">
+                            {p.title}
+                          </h3>
+                        </Link>
+                      </div>
+                      <Link
+                        to={`/work/${p.slug}`}
+                        className="pt-2 flex items-center justify-between text-secondary text-xs sm:text-sm font-semibold border-t border-surface-container-highest"
+                      >
+                        <span>تفاصيل القطعة والخامات</span>
+                        <span className="material-symbols-outlined text-[20px] group-hover:-translate-x-1 transition-transform">
+                          west
+                        </span>
+                      </Link>
                     </div>
-                  </div>
-                  <div className="p-5 flex flex-col flex-1 justify-between gap-4 text-right">
-                    <div>
-                      <h3 className="text-base sm:text-lg font-bold text-primary mb-1.5 group-hover:text-secondary transition-colors">
-                        {p.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed line-clamp-2">
-                        {p.description}
-                      </p>
-                    </div>
-                    <Link
-                      to={p.link}
-                      className="pt-2 flex items-center justify-between text-secondary text-xs sm:text-sm font-semibold border-t border-surface-container-highest"
-                    >
-                      <span>تفاصيل القطعة والخامات</span>
-                      <span className="material-symbols-outlined text-[20px] group-hover:-translate-x-1 transition-transform">
-                        west
-                      </span>
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </article>
+                ))}
+              </div>
+            )}
 
             {/* Action Button: View Full Gallery */}
             <div className="mt-12 flex justify-center">

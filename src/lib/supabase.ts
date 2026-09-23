@@ -134,3 +134,26 @@ export async function fetchWorkBySlugFromSupabase(slug: string) {
     return null
   }
 }
+
+/**
+ * Fetch categories from Supabase
+ */
+export async function fetchCategoriesFromSupabase() {
+  try {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*')
+      .order('display_order', { ascending: true })
+
+    if (error) {
+      console.warn('Could not fetch categories from Supabase:', error.message)
+      return null
+    }
+
+    return data
+  } catch (err) {
+    console.error('Fetch categories error:', err)
+    return null
+  }
+}
+

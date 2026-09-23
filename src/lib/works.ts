@@ -1,131 +1,98 @@
+import {
+  fetchWorksFromSupabase,
+  fetchWorkBySlugFromSupabase,
+  fetchCategoriesFromSupabase,
+} from './supabase'
+
+export type WorkImageItem = {
+  id: string
+  work_id: string
+  image_url: string
+  title?: string
+  sort_order?: number
+  badge?: string
+}
+
 export type Work = {
+  id: string
   slug: string
   title: string
   category: string
+  categoryId?: string
   summary: string
   description: string
   material: string
   duration: string
   finish: string
   image: string
+  images: WorkImageItem[]
+  dimensions?: string
+  warranty?: string
+  special_badge?: string
+  reference_code?: string
+  project_context?: string
+  approx_price?: number
+  is_featured?: boolean
+  is_wide?: boolean
+  created_at?: string
 }
 
-const img = (id: string, w = 1200, h = 900) =>
-  `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format`
+export function mapSupabaseWork(raw: any): Work {
+  const images: WorkImageItem[] = (raw.work_images || []).sort(
+    (a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0)
+  )
+  const primaryImage =
+    images.length > 0
+      ? images[0].image_url
+      : raw.image_url ||
+        'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=1200&q=80'
 
-export const categories = ['الكل', 'طاولات', 'خزائن', 'أبواب', 'مطابخ', 'ديكور']
+  return {
+    id: raw.id,
+    slug: raw.slug || raw.id,
+    title: raw.title || 'عمل خشبي مخصص',
+    category: raw.categories?.name || 'أعمال خشبية',
+    categoryId: raw.category_id,
+    summary: raw.description ? raw.description.slice(0, 160) : raw.title || '',
+    description: raw.description || '',
+    material: raw.material || 'خشب طبيعي صلب',
+    duration: raw.execution_duration || 'حسب الطلب',
+    finish: raw.finish_type || 'زيت طبيعي ألماني معتمد',
+    image: primaryImage,
+    images: images,
+    dimensions: raw.dimensions || '',
+    warranty: raw.warranty_period || '',
+    special_badge: raw.special_badge || '',
+    reference_code: raw.reference_code || '',
+    project_context: raw.project_context || '',
+    approx_price: raw.approx_price,
+    is_featured: !!raw.is_featured,
+    is_wide: !!raw.is_wide,
+    created_at: raw.created_at,
+  }
+}
 
-export const works: Work[] = [
-  {
-    slug: 'royal-walnut-dining-table',
-    title: 'طاولة طعام ملكية بقصّة حية (Live Edge) ومقاعد منجدة بالجلد الطبيعي',
-    category: 'طاولات',
-    summary: 'طاولة ملكية من لوحين متقابلين من خشب الجوز المعمر وقاعدة نحاسية',
-    description:
-      'صُممت هذه القطعة خصيصاً لفيلا خاصة بدمشق، باستخدام لوحين متقابلين من شجرة جوز أمريكي معمرة، مع صقل يدوي بزيوت طبيعية عضوية خالية من الكيماويات الضارة، لتكون محوراً عمرانياً دافئاً يجمع العائلة لأجيال.',
-    material: 'خشب جوز أمريكي صلب (FAS)',
-    duration: '28 يوم عمل يدوي مكثف',
-    finish: '4 طبقات زيت وشمع عسل طبيعي (Osmo)',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBesiWog6lyU3Bn__oQP6ZXdk-90ZfwOR9pPObwpKjQXVJ_5oFKVqH99yNboa3sMKF3L8dC7DAXzt5i43fKZqrd6971Zi8vsagk6S7onwsWeEVzr4bzbckg91R1hXAlvloCUOOcHsWjaxvcDi5nXfoBvPVtlefzqX2OTTGupDqrQtk-6Bo0YHPgu7NAMcfEwI-5xRClVkjKw-NxarmjJyBSkdgSZ1J2hfuWLVI_vcW_70WWYhjgDCET',
-  },
-  {
-    slug: 'oak-dining-table',
-    title: 'طاولة طعام من خشب البلوط',
-    category: 'طاولات',
-    summary: 'طاولة عائلية بلوح واحد وحواف طبيعية',
-    description:
-      'طاولة طعام مصنوعة من لوح بلوط أوروبي مختار بعناية، بُنيت بأسلوب اللوح الواحد مع الحفاظ على حواف الخشب الطبيعية. صُقلت باليد وطُليت بزيت طبيعي يُبرز عروق الخشب دون أن يخفيها.',
-    material: 'بلوط أوروبي صلب',
-    duration: '٦ أسابيع',
-    finish: 'زيت طبيعي مطفّأ',
-    image: img('1653971858625'),
-  },
-  {
-    slug: 'walnut-cabinet',
-    title: 'خزانة عرض من الجوز',
-    category: 'خزائن',
-    summary: 'خزانة بأبواب زجاجية وتفاصيل نحاسية',
-    description:
-      'خزانة عرض بأبواب زجاجية وإطار من خشب الجوز الداكن، بمقابض نحاسية مشغولة يدوياً. صُممت لتكون قطعة محورية في غرفة المعيشة، بأدراج انزلاقية ناعمة ورفوف قابلة للتعديل.',
-    material: 'جوز أمريكي',
-    duration: '٨ أسابيع',
-    finish: 'ورنيش شمعي',
-    image: img('1759171069660'),
-  },
-  {
-    slug: 'pivot-door',
-    title: 'باب محوري خشبي',
-    category: 'أبواب',
-    summary: 'باب مدخل بمفصلة محورية وخطوط عمودية',
-    description:
-      'باب مدخل بارتفاع كامل يعمل بمفصلة محورية مخفية، بتصميم خطوط عمودية نظيفة تمنح واجهة المنزل حضوراً عصرياً هادئاً. الخشب معالَج ضد الرطوبة ومهيّأ للاستخدام الخارجي.',
-    material: 'خشب الساج المعالج',
-    duration: '٥ أسابيع',
-    finish: 'دهان خارجي مقاوم',
-    image: img('1758977404839'),
-  },
-  {
-    slug: 'walnut-kitchen',
-    title: 'مطبخ خشبي متكامل',
-    category: 'مطابخ',
-    summary: 'وحدات مطبخ بواجهات خشبية دافئة',
-    description:
-      'مطبخ مصمّم على المقاس بواجهات خشبية دافئة وأسطح عمل متينة. يجمع بين المساحات التخزينية الذكية والخطوط البسيطة، مع مفصلات هادئة الإغلاق ولمسات نحاسية في المقابض.',
-    material: 'رقائق بلوط طبيعية',
-    duration: '١٠ أسابيع',
-    finish: 'طلاء مطفّأ مقاوم',
-    image: img('1758977404038'),
-  },
-  {
-    slug: 'sideboard-console',
-    title: 'كونسول تخزين منخفض',
-    category: 'ديكور',
-    summary: 'وحدة جانبية بخطوط أفقية ممتدة',
-    description:
-      'كونسول تخزين منخفض بخطوط أفقية ممتدة وأرجل مدببة أنيقة. مثالي لغرفة الاستقبال، يوازن بين مساحة التخزين والحضور البصري الخفيف، بأدراج مبطّنة من الداخل.',
-    material: 'بلوط مدخّن',
-    duration: '٧ أسابيع',
-    finish: 'زيت مقوّى مطفّأ',
-    image: img('1758977405163'),
-  },
-  {
-    slug: 'coffee-table',
-    title: 'طاولة قهوة نحتية',
-    category: 'طاولات',
-    summary: 'طاولة بقاعدة منحوتة وسطح دائري',
-    description:
-      'طاولة قهوة بسطح دائري وقاعدة منحوتة يدوياً تجمع بين النحت التقليدي والشكل العصري. كل قطعة فريدة بحكم طبيعة النحت اليدوي وتباين عروق الخشب.',
-    material: 'خشب الزان',
-    duration: '٤ أسابيع',
-    finish: 'شمع نحل طبيعي',
-    image: img('1653971858569'),
-  },
-  {
-    slug: 'display-hutch',
-    title: 'دولاب زجاجي كلاسيكي',
-    category: 'خزائن',
-    summary: 'دولاب عرض بإضاءة داخلية دافئة',
-    description:
-      'دولاب عرض بأبواب زجاجية وإضاءة داخلية دافئة تُبرز محتوياته. يجمع بين الإطار الخشبي المتين والزجاج الشفاف، مع رفوف زجاجية آمنة قابلة للتعديل.',
-    material: 'جوز وزجاج',
-    duration: '٩ أسابيع',
-    finish: 'ورنيش لامع خفيف',
-    image: img('1758565811303'),
-  },
-  {
-    slug: 'entry-bench',
-    title: 'مقعد مدخل مع تخزين',
-    category: 'ديكور',
-    summary: 'مقعد بمساحة تخزين مخفية أسفله',
-    description:
-      'مقعد مدخل بمساحة تخزين مخفية أسفل الجلسة، بخطوط بسيطة تناسب المداخل الضيقة. مثالي لترتيب الأحذية مع منطقة جلوس مريحة عند الباب.',
-    material: 'بلوط فاتح',
-    duration: '٣ أسابيع',
-    finish: 'زيت طبيعي',
-    image: img('1758977404839', 1200, 900),
-  },
-]
+export async function fetchWorks(): Promise<Work[]> {
+  const rawWorks = await fetchWorksFromSupabase()
+  if (!rawWorks) return []
+  return rawWorks.map(mapSupabaseWork)
+}
+
+export async function fetchWorkBySlug(slug: string): Promise<Work | null> {
+  const rawWork = await fetchWorkBySlugFromSupabase(slug)
+  if (!rawWork) return null
+  return mapSupabaseWork(rawWork)
+}
+
+export async function fetchCategories(): Promise<{ id: string; name: string }[]> {
+  const rawCategories = await fetchCategoriesFromSupabase()
+  if (!rawCategories) return []
+  return rawCategories.map((c: any) => ({ id: c.id, name: c.name }))
+}
+
+// Synchronous empty works array for compatibility
+export const works: Work[] = []
+export const categories: string[] = ['الكل']
 
 export function getWork(slug: string) {
   return works.find((w) => w.slug === slug)
