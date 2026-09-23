@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import WhatsAppButton from '../components/WhatsAppButton'
 import BackToTop from '../components/BackToTop'
 import MobileQuickBar from '../components/MobileQuickBar'
+import WoodScrollbar from '../components/WoodScrollbar'
 import { siteConfig } from '../config/site'
 
 function PageLoader() {
@@ -53,6 +54,7 @@ export default function Root() {
       <WhatsAppButton />
       <BackToTop />
       <MobileQuickBar />
+      <WoodScrollbar />
     </div>
   )
 }

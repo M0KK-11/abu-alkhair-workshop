@@ -105,7 +105,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="w-full pt-20 bg-background">
+    <div className="w-full bg-background">
       <div className="flex flex-col w-full">
         {/* Ambient Glows */}
         <div className="relative w-full overflow-hidden">
@@ -113,7 +113,7 @@ export default function Contact() {
           <div className="absolute top-96 left-10 w-80 h-80 bg-tertiary-fixed-dim/20 rounded-full blur-3xl pointer-events-none"></div>
 
           {/* Editorial Header Section */}
-          <section className="max-w-[1360px] mx-auto w-full px-6 md:px-12 pt-14 pb-8 relative z-10">
+          <section className="max-w-[1360px] mx-auto w-full px-6 md:px-12 pt-28 pb-8 relative z-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6">
               <div className="flex flex-col max-w-3xl">
                 <div className="flex items-center gap-2 text-secondary mb-2">

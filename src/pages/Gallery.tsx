@@ -187,10 +187,10 @@ export default function Gallery() {
   }
 
   return (
-    <div className="w-full pt-20 bg-background">
+    <div className="w-full bg-background">
       <div className="flex flex-col w-full">
         {/* Top Hero Header / Architectural Title Area */}
-        <section className="relative w-full bg-surface-container-low pt-12 pb-16 overflow-hidden border-b border-outline-variant/30">
+        <section className="relative w-full bg-surface-container-low pt-28 pb-16 overflow-hidden border-b border-outline-variant/30">
           {/* Subtle Architectural Backdrop Texture */}
           <div className="absolute inset-0 opacity-15 pointer-events-none flex items-center justify-center">
             <svg fill="none" height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">

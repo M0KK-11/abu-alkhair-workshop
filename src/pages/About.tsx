@@ -2,10 +2,10 @@ import { Link } from 'react-router'
 
 export default function About() {
   return (
-    <div className="w-full pt-20 bg-background">
+    <div className="w-full bg-background">
       <div className="flex flex-col w-full">
         {/* 1. Hero & Philosophy Section */}
-        <section className="relative w-full bg-surface py-14 overflow-hidden border-b border-outline-variant/30">
+        <section className="relative w-full bg-surface pt-28 pb-14 overflow-hidden border-b border-outline-variant/30">
           <div className="absolute -top-32 right-12 w-96 h-96 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none"></div>
           <div className="absolute bottom-0 left-10 w-80 h-80 rounded-full bg-tertiary-fixed/15 blur-3xl pointer-events-none"></div>
 

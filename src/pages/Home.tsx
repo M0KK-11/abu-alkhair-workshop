@@ -146,10 +146,10 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full pt-20 bg-background">
+    <div className="w-full bg-background">
       <div className="flex flex-col w-full">
         {/* 1. Hero Section */}
-        <section className="relative bg-primary-container text-white overflow-hidden border-b border-[#d9b98c]/20">
+        <section className="relative bg-primary-container text-white overflow-hidden border-b border-[#d9b98c]/20 pt-20">
           {/* Subtle Background Architectural Vectors & Glows */}
           <div className="absolute inset-0 pointer-events-none opacity-20">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">

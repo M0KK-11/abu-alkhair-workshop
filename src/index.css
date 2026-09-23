@@ -86,26 +86,117 @@ h4,
   color: var(--color-ivory);
 }
 
-/* Hide scrollbars until scrolling */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
+/* ==========================================================================
+   Artisanal Wood Sliding Bar (شريط التمرير الخشبي الفاخر)
+   Hide generic native browser scrollbars to display the artisanal wood piece
+   ========================================================================== */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and older Edge */
 }
-*:hover {
-  scrollbar-color: rgba(184, 115, 51, 0.4) transparent;
-}
+
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  display: none;
+  width: 0px;
+  height: 0px;
 }
-::-webkit-scrollbar-thumb {
-  background-color: transparent;
+
+/* The routed carpenter track with brass end stops (مجرى خشبي محفور مع مصادم نحاسية) */
+::-webkit-scrollbar-track {
+  background-color: #eee3d2;
+  background-image:
+    /* Top brass stop */
+    linear-gradient(180deg, #9b5a23 0px, #d49a55 2px, #f7d5a5 3px, #8c4a16 5px, transparent 6px),
+    /* Bottom brass stop */
+    linear-gradient(0deg, #9b5a23 0px, #d49a55 2px, #f7d5a5 3px, #8c4a16 5px, transparent 6px),
+    /* Routed channel depth gradient */
+    linear-gradient(
+      90deg,
+      rgba(40, 20, 10, 0.25) 0%,
+      rgba(247, 241, 232, 0.6) 45%,
+      rgba(242, 234, 222, 0.5) 60%,
+      rgba(35, 16, 8, 0.2) 100%
+    ),
+    /* Channel wood grain */
+    repeating-linear-gradient(
+      90deg,
+      rgba(138, 82, 41, 0.05) 0px,
+      rgba(138, 82, 41, 0.05) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  box-shadow:
+    inset 2px 0 5px rgba(35, 18, 10, 0.3),
+    inset -1px 0 2px rgba(255, 255, 255, 0.9);
   border-radius: 9999px;
-  border: 3px solid transparent;
-  background-clip: content-box;
+  margin: 4px 0;
 }
-:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(184, 115, 51, 0.35);
+
+/* The solid handcrafted wood piece (قطعة خشب مجسمة بتعشيقة فراشة يابانية وحزوز مسطرة النجار) */
+::-webkit-scrollbar-thumb {
+  background-color: #8a4e22;
+  background-image:
+    /* Artisan joinery details: Butterfly key joint, dowel pins, and carpenter ruler notches */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='80' viewBox='0 0 18 80'%3E%3Cline x1='1' y1='10' x2='4' y2='10' stroke='%23281206' stroke-width='1'/%3E%3Cline x1='1' y1='20' x2='6' y2='20' stroke='%23281206' stroke-width='1.2'/%3E%3Cline x1='1' y1='30' x2='4' y2='30' stroke='%23281206' stroke-width='1'/%3E%3Cline x1='1' y1='40' x2='6' y2='40' stroke='%23281206' stroke-width='1.2'/%3E%3Cline x1='1' y1='50' x2='4' y2='50' stroke='%23281206' stroke-width='1'/%3E%3Cline x1='1' y1='60' x2='6' y2='60' stroke='%23281206' stroke-width='1.2'/%3E%3Cline x1='1' y1='70' x2='4' y2='70' stroke='%23281206' stroke-width='1'/%3E%3Cline x1='1' y1='21' x2='6' y2='21' stroke='%23f5d5aa' stroke-width='0.6' opacity='0.5'/%3E%3Cline x1='1' y1='41' x2='6' y2='41' stroke='%23f5d5aa' stroke-width='0.6' opacity='0.5'/%3E%3Cline x1='1' y1='61' x2='6' y2='61' stroke='%23f5d5aa' stroke-width='0.6' opacity='0.5'/%3E%3Cellipse cx='10' cy='12' rx='3' ry='2.2' fill='%23381a08' stroke='%23d99b52' stroke-width='0.75'/%3E%3Ccircle cx='10' cy='12' r='1' fill='%231f0d04'/%3E%3Cpath d='M6 35 L14 35 L10 40 L14 45 L6 45 L10 40 Z' fill='%23240e04' stroke='%23e0a35c' stroke-width='0.85'/%3E%3Cpath d='M6 35 L10 40 L6 45' stroke='%23120601' stroke-width='1' fill='none'/%3E%3Cellipse cx='10' cy='68' rx='3' ry='2.2' fill='%23381a08' stroke='%23d99b52' stroke-width='0.75'/%3E%3Ccircle cx='10' cy='68' r='1' fill='%231f0d04'/%3E%3C/svg%3E"),
+    /* Longitudinal natural wood grain fibers */
+    repeating-linear-gradient(
+      90deg,
+      rgba(40, 18, 7, 0.16) 0px,
+      rgba(40, 18, 7, 0.16) 1px,
+      transparent 1px,
+      transparent 3px,
+      rgba(255, 235, 200, 0.12) 3px,
+      rgba(255, 235, 200, 0.12) 4px,
+      transparent 4px,
+      transparent 7px
+    ),
+    /* 3D Chamfered Timber plank body with rich walnut/oak core */
+    linear-gradient(
+      90deg,
+      #44220c 0%,
+      #683615 10%,
+      #8e4e22 26%,
+      #b26c33 46%,
+      #ca8548 54%,
+      #9e5b27 75%,
+      #663414 90%,
+      #3e1c09 100%
+    );
+  background-size: 18px 80px, 100% 100%, 100% 100%;
+  background-repeat: repeat-y, repeat, no-repeat;
+  /* Distinct sculpted wooden piece form (شكل غير متناظر بحواف مشطوفة) */
+  border-radius: 4px 9px 5px 11px / 8px 18px 10px 20px;
+  border: 2px solid rgba(60, 28, 10, 0.75);
+  box-shadow:
+    -3px 3px 8px rgba(18, 8, 3, 0.5),
+    inset 2px 2px 2px rgba(255, 235, 195, 0.65),
+    inset -2px -2px 3px rgba(30, 12, 4, 0.85);
+  transition: filter 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  min-height: 64px;
+}
+
+/* Varnished polished wood on hover (لمعان طبقة الورنيش وزيت الأوزمو الطبيعي) */
+::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.1) contrast(1.05);
+  border-color: rgba(90, 42, 16, 0.9);
+  box-shadow:
+    -4px 4px 12px rgba(25, 10, 4, 0.6),
+    inset 2px 2px 3px rgba(255, 245, 220, 0.8),
+    inset -2px -2px 3px rgba(30, 12, 4, 0.9);
+}
+
+/* Active drag state (أثناء سحب وضغط قطعة الخشب على السكة) */
+::-webkit-scrollbar-thumb:active {
+  filter: brightness(0.92) saturate(1.15);
+  box-shadow:
+    -1px 1px 4px rgba(20, 8, 3, 0.6),
+    inset 2px 2px 4px rgba(20, 8, 3, 0.9),
+    inset -1px -1px 2px rgba(255, 215, 170, 0.3);
+}
+
+/* Corner where horizontal and vertical scrollbars meet */
+::-webkit-scrollbar-corner {
+  background: #eee3d2;
 }
 
 /* Subtle wood-grain / paper texture overlay used on charcoal fields */

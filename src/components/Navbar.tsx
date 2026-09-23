@@ -14,7 +14,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-primary-container/95 backdrop-blur-xl border-b border-[#d9b98c]/25">
+    <header className="fixed top-0 w-full z-50 h-20 bg-primary-container/95 backdrop-blur-xl border-b border-[#d9b98c]/25">
       <div className="h-20 max-w-[1360px] mx-auto px-6 md:px-12 flex items-center justify-between gap-6">
         {/* Brand / Logo */}
         <Link
