@@ -12,29 +12,6 @@ export default function Footer() {
           <p className="text-sm text-[#d2c4bf] leading-relaxed mt-2">
             {siteConfig.description}
           </p>
-          <div className="flex items-center gap-3 pt-2">
-            <a
-              href="#"
-              aria-label="Instagram"
-              className="w-9 h-9 rounded border border-[#d9b98c]/30 flex items-center justify-center text-[#d2c4bf] hover:text-[#fff9ef] hover:border-[#b87333] transition-colors"
-            >
-              <span className="material-symbols-outlined text-[18px]">photo_camera</span>
-            </a>
-            <a
-              href="#"
-              aria-label="Pinterest"
-              className="w-9 h-9 rounded border border-[#d9b98c]/30 flex items-center justify-center text-[#d2c4bf] hover:text-[#fff9ef] hover:border-[#b87333] transition-colors"
-            >
-              <span className="material-symbols-outlined text-[18px]">push_pin</span>
-            </a>
-            <a
-              href="#"
-              aria-label="Behance"
-              className="w-9 h-9 rounded border border-[#d9b98c]/30 flex items-center justify-center text-[#d2c4bf] hover:text-[#fff9ef] hover:border-[#b87333] transition-colors"
-            >
-              <span className="material-symbols-outlined text-[18px]">palette</span>
-            </a>
-          </div>
         </div>
 
         {/* Col 2: Categories */}

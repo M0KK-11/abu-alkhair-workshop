@@ -31,30 +31,6 @@ export default function About() {
                   العريق وحكمة التعشيق الياباني.
                 </p>
 
-                {/* Founder's Signature Quote Card */}
-                <div className="mt-2 bg-surface-container-high p-5 sm:p-6 rounded-2xl shadow-sm relative overflow-hidden border border-outline-variant/30">
-                  <div className="absolute top-2 left-4 text-secondary/20 select-none">
-                    <span className="material-symbols-outlined text-7xl">format_quote</span>
-                  </div>
-                  <div className="flex items-start gap-4 relative z-10">
-                    <div className="w-1.5 self-stretch bg-[#b87333] rounded-full shrink-0"></div>
-                    <div className="flex flex-col gap-1.5">
-                      <blockquote className="text-sm sm:text-base text-primary font-medium italic leading-relaxed">
-                        "الخشب ليس مجرد مادة خام للبناء، بل كائن حي يحمل تاريخ الشجرة، ودورنا
-                        كنحاتين وحرفيين هو إبراز روحه الداخلية لكل بيت يقدر الأصالة."
-                      </blockquote>
-                      <div className="flex items-center gap-2 pt-1">
-                        <span className="text-xs sm:text-sm text-primary font-bold">
-                          المعلم عبد الله أبو الخير
-                        </span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
-                        <span className="text-[11px] sm:text-xs text-secondary font-medium">
-                          المؤسس وكبير النجارين المعماريين
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* Visual Hero Mosaic */}
